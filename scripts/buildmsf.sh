@@ -1,6 +1,5 @@
 #!/bin/bash
-# BUILD MSF FO VAGRANT FO DEV PORPOSIES
-
+# I CAN MSF AND SO CAN YOU
 package_hell () {
 sudo apt-get update
 sudo apt-get -y install \
@@ -12,7 +11,7 @@ sudo apt-get -y install \
   postgresql-contrib libpq-dev \
   libapr1 libaprutil1 libsvn1 \
   libpcap-dev git postgresql-client \
-  htop unzip lsof git-core
+  htop unzip lsof git-core vim
 }
 dev_stuff () {
 cp /vagrant/setup/bash_profile ~/.bash_profile
@@ -27,22 +26,31 @@ goddam_rvm () {
   sudo usermod -a -G rvm $(whoami)
 } 
 
+setup_postgres() {
+  service postgresql start
+  sudo -u postgres psql -c "CREATE USER msf WITH PASSWORD 'msfdev';"
+  sudo -u postgres psql -c "CREATE database msf;"
+  sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE msf to msf;"
+}
 wtf_msf () {
   git clone https://github.com/rapid7/metasploit-framework /opt/msf
   cd /opt/msf; bundle install
+  for MSF in $(ls msf*); do ln -s /opt/metasploit-framework/$MSF /usr/local/bin/$MSF;done
+  cp /vagrant/setup/database.yml /opt/msf/config/database.yml
 }
 
-todo () {
+supbrah () {
 echo " __  __ ____  _____     ____  _______     __"
 echo "|  \/  / ___||  ___|   |  _ \| ____\ \   / /"
 echo "| |\/| \___ \| |_ _____| | | |  _|  \ \ / / "
 echo "| |  | |___) |  _|_____| |_| | |___  \ V /  "
 echo "|_|  |_|____/|_|       |____/|_____|  \_/   "
-echo "Now you need to start postgres and setup msf users brohan, happy msfing"
+echo "happy msfing dev nonsense"
 }
 
 package_hell
 dev_stuff
 goddam_rvm
+setup_postgres
 wtf_msf
-todo
+supbrah
