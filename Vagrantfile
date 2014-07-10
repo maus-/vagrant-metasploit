@@ -21,7 +21,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     override.vm.box = VMWARE_BOX
     override.vm.box_URL = VMWARE_BOX_URL
     v.vmx["memsize"] = MEMORY
-    v.vmx["numvcpus" = CPU
+    v.vmx["numvcpus"] = CPU
   end
   config.vm.provision "shell", path: "scripts/buildmsf.sh"
 end
