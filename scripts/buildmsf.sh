@@ -38,6 +38,7 @@ setup_nmap() {
 setup_msf () {
 git clone https://github.com/rapid7/metasploit-framework $3
   cd $3; bundle install
+  rvm gemset use metasploit-framework --default
   for MSF in $(ls msf*)
    do ln -s $3/$MSF /usr/local/sbin/$MSF
   done
@@ -56,8 +57,7 @@ supbrah () {
   echo "| |\/| \___ \| |_   "
   echo "| |  | |___) |  _|  "
   echo "|_|  |_|____/|_|    "
-  echo "happy msfing dev nonsense"
-  echo "TODO: call msf oustide of $1"
+  echo "Happy MSF nonsense  "
 }
 
 install_deps
