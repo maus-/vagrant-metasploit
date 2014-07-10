@@ -6,4 +6,5 @@ Written originally for MSF Development purposes. But I figured someone might thi
 
 ##Contributors
 Maus Stearns
+
 Michael Carlson (Prandium)
