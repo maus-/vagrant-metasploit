@@ -1,4 +1,4 @@
-vagrant-metasploit
+Vagrant-Metasploit
 ==================
 Vagrant Box that will deploy a bare ubuntu box (vmware or virtualbox) and install MSF on top.
 
