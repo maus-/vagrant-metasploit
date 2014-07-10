@@ -1,7 +1,7 @@
 #!/bin/bash
 # I CAN MSF AND SO CAN YOU
-LOLPASSWORD=$(strings /dev/urandom | grep -o '[[:alnum:]]' | head -n 32 | tr -d '\n'; echo)
-LOLPASSWORDTESTUSER=$(strings /dev/urandom | grep -o '[[:alnum:]]' | head -n 32 | tr -d '\n'; echo)
+LOLPASSWORD=$(head -n1000 /dev/urandom | strings | grep -o '[[:alnum:]]' | head -n 32 | tr -d '\n'; echo)
+LOLPASSWORDTESTUSER=$(head -n1000 /dev/urandom | strings | grep -o '[[:alnum:]]' | head -n 32 | tr -d '\n'; echo)
 RUBY_VERSION="ruby-1.9.3-p547"
 MSFPATH="/opt/msf"
 
