@@ -14,10 +14,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box_url = VBOX_URL
   config.vm.network "public_network", bridge: 'en1: Wi-Fi (AirPort)'
   config.vm.provider "virtualbox" do |v|
-    v.customize ["modifyvm", :id, "--memory" MEMORY ]
+    v.customize ["modifyvm", :id, "--memory", MEMORY ]
     v.customize ["modifyvm", :id, "--cpus", CPU ]
   end
-  config.vm.provider "vmware_fusion" do |v, overrride|
+  config.vm.provider "vmware_fusion" do |v, override| 
     override.vm.box = VMWARE_BOX
     override.vm.box_URL = VMWARE_BOX_URL
     v.vmx["memsize"] = MEMORY
