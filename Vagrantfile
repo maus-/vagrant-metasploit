@@ -19,7 +19,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
   config.vm.provider "vmware_fusion" do |v, override| 
     override.vm.box = VMWARE_BOX
-    override.vm.box_URL = VMWARE_BOX_URL
+    override.vm.box_url = VMWARE_BOX_URL
     v.vmx["memsize"] = MEMORY
     v.vmx["numvcpus"] = CPU
   end
