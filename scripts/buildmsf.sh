@@ -37,8 +37,7 @@ setup_nmap() {
 }
 setup_msf () {
 git clone https://github.com/rapid7/metasploit-framework $3
-  cd $3; bundle install
-  rvm gemset use metasploit-framework --default
+  cd $3; rvm @global do bundle install
   for MSF in $(ls msf*)
    do ln -s $3/$MSF /usr/local/sbin/$MSF
   done
