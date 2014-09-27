@@ -1,10 +1,10 @@
 Vagrant-Metasploit
 ==================
-Vagrant Box that will deploy a bare ubuntu box (vmware or virtualbox) and install MSF on top.
+Vagrant Box that will deploy Ubuntu 14.04 Server with Nmap, Veil-Evasion and the Metasploit Framework all from latest sources and updates.
 
-Written originally for MSF Development purposes. But I figured someone might think its usefull.
 
 ##Contributors
-Maus Stearns
 
+Maus Stearns
 Michael Carlson (Prandium)
+Alex Levinson

@@ -1,10 +1,10 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-VBOX = "ubuntu_1310"
-VBOX_URL = "http://puppet-vagrant-boxes.puppetlabs.com/ubuntu-1310-i386-virtualbox-puppet.box"
-VMWARE_BOX = "ubuntu_1310_fusion"
-VMWARE_BOX_URL = "http://shopify-vagrant.s3.amazonaws.com/ubuntu-13.10_vmware.box"
+VBOX = "ubuntu_1404"
+VBOX_URL = "https://vagrantcloud.com/ubuntu/boxes/trusty64/versions/1/providers/virtualbox.box"
+VMWARE_BOX = "ubuntu_1404_fusion"
+VMWARE_BOX_URL = "https://vagrantcloud.com/chef/boxes/ubuntu-14.04-i386/versions/1/providers/vmware_desktop.box"
 MEMORY = "4096"
 CPU = "4"
 
