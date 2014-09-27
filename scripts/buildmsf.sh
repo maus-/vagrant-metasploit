@@ -122,7 +122,7 @@ setup_veil()
   sed -i "s|read -p ' Continue With Installation? (y\/n): ' rootonly|rootonly=y|g" setup/setup.sh
   sed -i 's|raw_input(" [>] Please enter the path of your metasploit installation: ")|/opt/metasploit-framework|g' config/update.py 
   python Veil-Evasion.py
-  sed '32d' /etc/veil/settings.py
+  sed -i 's|METASPLOIT_PATH="/opt/metasploit-framework"|METASPLOIT_PATH="/opt/metasploit"|g' /etc/veil/settings.py
   echo "METASPLOIT_PATH=$2" > /etc/veil/settings.py
   echo "#!/usr/bin/env bash 
   python $1/Veil-Evasion.py" > /usr/local/sbin/veil-evasion
