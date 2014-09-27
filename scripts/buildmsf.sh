@@ -120,9 +120,12 @@ setup_veil()
   cd $1
   # Hack for prompt free install
   sed -i "s|read -p ' Continue With Installation? (y\/n): ' rootonly|rootonly=y|g" setup/setup.sh
+  sed -i 's|raw_input(" [>] Please enter the path of your metasploit installation: ")|/opt/metasploit-framework|g' config/update.py 
   python Veil-Evasion.py
+  sed '32d' /etc/veil/settings.py
+  echo "METASPLOIT_PATH=$2" > /etc/veil/settings.py
   echo "#!/usr/bin/env bash 
-  $1/Veil-Evasion.py" > /usr/local/sbin/veil-evasion
+  python $1/Veil-Evasion.py" > /usr/local/sbin/veil-evasion
   chmod +x /usr/local/sbin/veil-evasion
 }
 #----------------------------------------------------------------------------------------------------------------------
@@ -151,6 +154,6 @@ git clone https://github.com/rapid7/metasploit-framework $MSF_PATH &
 git clone https://github.com/Veil-Framework/Veil-Evasion.git $VEIL_PATH
 rvm install $(cat $MSF_PATH/.ruby-version)
 setup_msf $MSF_PASSWORD $MSF_PASSWORDTESTUSER $MSF_PATH &
-setup_veil $VEIL_PATH
+setup_veil $VEIL_PATH $MSF_PATH
 supbrah $MSF_PATH $VEIL_PATH
 
