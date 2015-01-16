@@ -65,18 +65,26 @@ install_deps ()
                      libffi-dev \
                      tree \
                      python-crypto \
+                     python-pip \
 
 }
 #----------------------------------------------------------------------------------------------------------------------
 ubuntu_rvm ()
 {
+  gpg --keyserver hkp://keys.gnupg.net --recv-keys D39DC0E3
   curl -L https://get.rvm.io | sudo bash -s stable
   source /etc/profile.d/rvm.sh
   sudo usermod -a -G rvm $(whoami)
   rvm autolibs enable
-  rvm install $SYSTEM_RUBY_VERSION
+  rvm install $SYSTEM_RUBY_VERSION --auto-dotfiles
   rvm use $SYSTEM_RUBY_VERSION@$SYSTEM_RUBY_GEMSET --default --create
   ubuntu_log_info "Finished installing RVM!"
+}
+#----------------------------------------------------------------------------------------------------------------------
+clone_repos() 
+{
+ git clone https://github.com/rapid7/metasploit-framework $1
+ git clone https://github.com/Veil-Framework/Veil-Evasion.git $2
 }
 #----------------------------------------------------------------------------------------------------------------------
 setup_postgres() 
@@ -99,6 +107,7 @@ setup_nmap() {
 #----------------------------------------------------------------------------------------------------------------------
 setup_msf () 
 { 
+  rvm install $(cat $MSF_PATH/.ruby-version) --auto-dotfiles
   cd $3
   bundle install
   for MSF in $(ls msf*); do
@@ -115,45 +124,50 @@ setup_msf ()
   source ~/.bash_profile
 }
 #----------------------------------------------------------------------------------------------------------------------
-setup_veil() 
+setup_veil()
 {
   cd $1
-  # Hack for prompt free install
-  sed -i "s|read -p ' Continue With Installation? (y\/n): ' rootonly|rootonly=y|g" setup/setup.sh
-  sed -i 's|raw_input(" [>] Please enter the path of your metasploit installation: ")|/opt/metasploit-framework|g' config/update.py 
-  python Veil-Evasion.py
-  sed -i 's|METASPLOIT_PATH="/opt/metasploit-framework"|METASPLOIT_PATH="/opt/metasploit"|g' /etc/veil/settings.py
+  sed -i "s|read -p ' Continue With Installation? (y\/n): ' rootonly|rootonly=y|g" $1/setup/setup.sh
+  sed -i "s:msfpath =.*$:msfpath = '$2':" $1/config/update.py
+  echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections
+  python $1/Veil-Evasion.py 
+  sed -i "s|METASPLOIT_PATH='/opt/metasploit-framework'|METASPLOIT_PATH='$2'|g" /etc/veil/settings.py
   echo "METASPLOIT_PATH=$2" > /etc/veil/settings.py
   echo "#!/usr/bin/env bash 
   python $1/Veil-Evasion.py" > /usr/local/sbin/veil-evasion
   chmod +x /usr/local/sbin/veil-evasion
 }
 #----------------------------------------------------------------------------------------------------------------------
-supbrah () {
-  echo " __  __ ____  _____     "
-  echo "|  \/  / ___||  ___|_   "
-  echo "| |\/| \___ \| |_ _| |_ "
-  echo "| |  | |___) |  _|_   _|"
-  echo "|_|  |_|____/|_|   |_|  "
-  echo "[*] MSF Location: $1"
-  echo "[*] Veil Location: $2"
-  echo "[*] msf* & veil executables already pathed into /usr/local/sbin"
-  echo "[*] "
-  echo "[!] NOTE: You will need to logout and log back in to finalize changes!!!"
-  echo "[*] "
+hello()
+{
+  echo ' ___________'
+  echo '< 4d53462b >'
+  echo '< 5665696c >'
+  echo '< 383d3d44 >'
+  echo ' -----------'
+  echo '    \ '
+  echo '    \'
+  echo '                                   .::!!!!!!!:.'
+  echo '  .!!!!!:.                        .:!!!!!!!!!!!!'
+  echo '  ~~~~!!!!!!.                 .:!!!!!!!!!UWWW$$$ '
+  echo '      :$$NWX!!:           .:!!!!!!XUWW$$$$$$$$$P '
+  echo '      $$$$$##WX!:      .<!!!!UW$$$$"  $$$$$$$$# '
+  echo '      $$$$$  $$$UX   :!!UW$$$$$$$$$   4$$$$$* '
+  echo '      ^$$$B  $$$$\     $$$$$$$$$$$$   d$$R" '
+  echo '        "*$bd$$$$      *$$$$$$$$$$$o+#" '
+  echo '             """"          """"""" '
+  echo "[*] MSF Location:$1"
+  echo "[*] Veil Location:$2"
+  echo "[*] MSF* & Veil executables already pathed into /usr/local/sbin"
   echo "[*] Enjoy."
 }
 #----------------------------------------------------------------------------------------------------------------------
-
 install_deps
 ubuntu_rvm
 setup_nmap &
 source /etc/profile.d/rvm.sh
 setup_postgres $MSF_PASSWORD $MSF_PASSWORDTESTUSER &
-git clone https://github.com/rapid7/metasploit-framework $MSF_PATH &
-git clone https://github.com/Veil-Framework/Veil-Evasion.git $VEIL_PATH
-rvm install $(cat $MSF_PATH/.ruby-version)
+clone_repos $MSF_PATH $VEIL_PATH
 setup_msf $MSF_PASSWORD $MSF_PASSWORDTESTUSER $MSF_PATH &
 setup_veil $VEIL_PATH $MSF_PATH
-supbrah $MSF_PATH $VEIL_PATH
-
+hello $MSF_PATH $VEIL_PATH
