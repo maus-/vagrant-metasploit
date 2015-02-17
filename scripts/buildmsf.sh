@@ -74,6 +74,13 @@ ubuntu_rvm ()
   gpg --keyserver hkp://keys.gnupg.net --recv-keys D39DC0E3
   curl -L https://get.rvm.io | sudo bash -s stable
   source /etc/profile.d/rvm.sh
+  export rvmsudo_secure_path=1
+  if [ -d /vagrant ]; 
+    then
+      echo "export rvmsudo_secure_path=1" >> ~vagrant/.bash_profile
+    else
+      echo "export rvmsudo_secure_path=1" >> ~$(whoami)/.bash_profile
+  fi
   sudo usermod -a -G rvm $(whoami)
   rvm autolibs enable
   rvm install $SYSTEM_RUBY_VERSION --auto-dotfiles
@@ -83,7 +90,7 @@ ubuntu_rvm ()
 #----------------------------------------------------------------------------------------------------------------------
 clone_repos() 
 {
- git clone https://github.com/rapid7/metasploit-framework $1
+ git clone https://github.com/rapid7/metasploit-framework $1 
  git clone https://github.com/Veil-Framework/Veil-Evasion.git $2
 }
 #----------------------------------------------------------------------------------------------------------------------
@@ -109,7 +116,7 @@ setup_msf ()
 { 
   rvm install $(cat $MSF_PATH/.ruby-version) --auto-dotfiles
   cd $3
-  bundle install
+  rvmsudo bundle install
   for MSF in $(ls msf*); do
     echo "#!/usr/bin/env bash" > /usr/local/sbin/$MSF
     echo "rvm in $3 do $3/$MSF" >> /usr/local/sbin/$MSF
@@ -156,18 +163,38 @@ hello()
   echo '      ^$$$B  $$$$\     $$$$$$$$$$$$   d$$R" '
   echo '        "*$bd$$$$      *$$$$$$$$$$$o+#" '
   echo '             """"          """"""" '
-  echo "[*] MSF Location:$1"
-  echo "[*] Veil Location:$2"
-  echo "[*] MSF* & Veil executables already pathed into /usr/local/sbin"
+  echo "[*] MSF* executables already pathed into /usr/local/sbin"
+  echo "[*] Call MSF* with 'rvmsudo msfconsole'"
   echo "[*] Enjoy."
 }
 #----------------------------------------------------------------------------------------------------------------------
-install_deps
-ubuntu_rvm
-setup_nmap &
-source /etc/profile.d/rvm.sh
-setup_postgres $MSF_PASSWORD $MSF_PASSWORDTESTUSER &
-clone_repos $MSF_PATH $VEIL_PATH
-setup_msf $MSF_PASSWORD $MSF_PASSWORDTESTUSER $MSF_PATH &
-setup_veil $VEIL_PATH $MSF_PATH
-hello $MSF_PATH $VEIL_PATH
+base()
+{
+  install_deps
+  ubuntu_rvm
+  setup_nmap &
+  source /etc/profile.d/rvm.sh
+  setup_postgres $MSF_PASSWORD $MSF_PASSWORDTESTUSER &
+  git clone https://github.com/rapid7/metasploit-framework $MSF_PATH
+  setup_msf $MSF_PASSWORD $MSF_PASSWORDTESTUSER $MSF_PATH
+}
+#----------------------------------------------------------------------------------------------------------------------
+extras()
+{
+  git clone https://github.com/Veil-Framework/Veil-Evasion.git $VEIL_PATH
+  setup_veil $VEIL_PATH $MSF_PATH
+}
+#----------------------------------------------------------------------------------------------------------------------
+# Lazy getops - whatever its bash.
+case "$1" in
+    extras)
+        base
+        extras
+        hello $MSF_PATH $VEIL_PATH
+        exit
+        ;;
+    *)
+        base
+        hello $MSF_PATH
+        exit 
+esac
