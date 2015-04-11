@@ -91,7 +91,6 @@ ubuntu_rvm ()
 clone_repos() 
 {
  git clone https://github.com/rapid7/metasploit-framework $1 
- git clone https://github.com/Veil-Framework/Veil-Evasion.git $2
 }
 #----------------------------------------------------------------------------------------------------------------------
 setup_postgres() 
