@@ -1,8 +1,8 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-VBOX = "chef/ubuntu-14.04"
-VMWARE_BOX = "chef/ubuntu-14.04"
+VBOX = "bento/ubuntu-14.04"
+VMWARE_BOX = "bento/ubuntu-14.04"
 # Dynamically allocate memory & cpu resources to use half of what
 # is available on the host. Change to 1 if you want to go all in.
 VM_CPU_UTIL = 2
@@ -23,7 +23,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     v.customize ["modifyvm", :id, "--memory", MEMORY ]
     v.customize ["modifyvm", :id, "--cpus", CPU ]
   end
-  config.vm.provider "vmware_fusion" do |v, override| 
+  config.vm.provider "vmware_fusion" do |v, override|
     override.vm.box = VMWARE_BOX
     v.vmx["memsize"] = MEMORY
     v.vmx["numvcpus"] = CPU
