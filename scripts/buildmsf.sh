@@ -71,7 +71,8 @@ install_deps ()
 #----------------------------------------------------------------------------------------------------------------------
 ubuntu_rvm ()
 {
-  gpg --keyserver hkp://keys.gnupg.net --recv-keys D39DC0E3
+  # This == maximum clown!
+  curl -sSL https://rvm.io/mpapis.asc | gpg --import -
   curl -L https://get.rvm.io | sudo bash -s stable
   source /etc/profile.d/rvm.sh
   export rvmsudo_secure_path=1
@@ -115,6 +116,7 @@ setup_msf ()
 { 
   rvm install $(cat $MSF_PATH/.ruby-version) --auto-dotfiles
   cd $3
+  gem install bundler
   rvmsudo bundle install
   for MSF in $(ls msf*); do
     echo "#!/usr/bin/env bash" > /usr/local/sbin/$MSF
