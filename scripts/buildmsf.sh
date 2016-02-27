@@ -36,6 +36,7 @@ install_deps ()
                      libcurl4-openssl-dev \
                      git-core \
                      libssl-dev \
+                     libgmp3-dev \
                      libyaml-dev \
                      openssl \
                      autoconf \
@@ -76,12 +77,7 @@ ubuntu_rvm ()
   curl -L https://get.rvm.io | sudo bash -s stable
   source /etc/profile.d/rvm.sh
   export rvmsudo_secure_path=1
-  if [ -d /vagrant ]; 
-    then
-      echo "export rvmsudo_secure_path=1" >> ~vagrant/.bash_profile
-    else
-      echo "export rvmsudo_secure_path=1" >> ~$(whoami)/.bash_profile
-  fi
+  echo "export rvmsudo_secure_path=1" >> $HOME/.bash_profile
   sudo usermod -a -G rvm $(whoami)
   rvm autolibs enable
   rvm install $SYSTEM_RUBY_VERSION --auto-dotfiles
