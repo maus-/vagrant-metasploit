@@ -3,6 +3,7 @@
 
 VBOX = "bento/ubuntu-14.04"
 VMWARE_BOX = "bento/ubuntu-14.04"
+PARALLELS_BOX = "parallels/ubuntu-14.04"
 # Dynamically allocate memory & cpu resources to use half of what
 # is available on the host. Change to 1 if you want to go all in.
 VM_CPU_UTIL = 2
@@ -27,6 +28,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     override.vm.box = VMWARE_BOX
     v.vmx["memsize"] = MEMORY
     v.vmx["numvcpus"] = CPU
+  end
+  config.vm.provider "parallels" do |prl, override|
+    override.vm.box = PARALLELS_BOX
+    prl.memory = MEMORY
+    prl.cpus = CPU
+    # Parallels Options Documentation: http://parallels.github.io/vagrant-parallels/docs/configuration.html
+    # Enable linked clones (faster since the unique VMs won't be full copies)
+    prl.linked_clone = true
   end
   config.vm.provision "shell", path: "scripts/buildmsf.sh"
 end
